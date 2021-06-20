@@ -8,10 +8,15 @@ pipeline {
     BUILD_TIMESTAMP = sh(script: "date +%Y%m%d-%H%M%S", returnStdout: true).trim()
   }
   stages {
+    stage('Login') {
+      steps {
+        sh "docker login -u ${DOCKERHUB_USER} -p ${DOCKERHUB_PW}"
+      }
+    }
     stage('Pre Check') {
       steps {
-        sh "test -f ~/var/jenkins_home/.docker/config.json"
-        sh "cat ~/var/jenkins_home/.docker/config.json | grep docker.io"
+        sh "test -f ~/.docker/config.json"
+        sh "cat ~/.docker/config.json | grep docker.io"
       }
     }
     stage('Build') {
